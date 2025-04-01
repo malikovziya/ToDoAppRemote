@@ -1,6 +1,5 @@
 package com.example.todoappremote.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todoappremote.data.local.ToDoEntity
@@ -23,14 +22,12 @@ class TodoViewModel(
 
     init {
         getAllTodos()
-        Log.e("ViewModel init", "all todos fetched")
     }
 
     fun getAllTodos() {
         viewModelScope.launch {
             getTodosUseCase().collect { result ->
                 _allTodos.value = result
-                Log.e("ViewModel func", result.toString())
             }
         }
     }

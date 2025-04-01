@@ -1,6 +1,6 @@
 # ToDo App - Remote Data with Retrofit
 
-This is a simple ToDo app that allows users to add, view, and filter tasks based on the day of the week. The app integrates with a remote API to fetch and store tasks.
+This is a simple ToDo app that allows users to add, view, and filter tasks based on the day of the week. The app integrates with a remote API and local database to fetch and store tasks.
 
 ## Features
 
@@ -18,6 +18,7 @@ This is a simple ToDo app that allows users to add, view, and filter tasks based
 - **Gson** for JSON parsing
 - **RecyclerView** for displaying tasks in a list
 - **ViewModel** and **MutableStateFlow** for managing real-time UI-related data updates
+- **Room Database** for storing tasks locally
 
 ## Video Recording
 - You can view the video recording of the app using this [link](https://drive.google.com/file/d/1Jpqewj3CTxvmXVOTef56GrBmETyhjsfl/view?usp=sharing).

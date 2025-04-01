@@ -1,7 +1,6 @@
 package com.example.todoappremote.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -9,8 +8,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.todoappremote.R
+import com.example.todoappremote.data.local.ToDoEntity
 import com.example.todoappremote.databinding.ActivityMainBinding
-import com.example.todoappremote.domain.models.ToDoItem
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -69,12 +68,10 @@ class MainActivity : AppCompatActivity() {
             val task = binding.editTextText.text.toString()
             val weekday = binding.spinner.selectedItem.toString()
             if (task.isNotEmpty()) {
-                val todoItem = ToDoItem(
-                    id = "",
+                val todoItem = ToDoEntity(
                     title = task,
                     weekday = weekday,
                     completed = false,
-                    createdAt = System.currentTimeMillis().toString()
                 )
                 viewModel.insert(todoItem)
                 binding.editTextText.text.clear()

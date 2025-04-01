@@ -1,11 +1,12 @@
 package com.example.todoappremote.domain.repositories
 
 import com.example.todoappremote.domain.models.ToDoItem
+import kotlinx.coroutines.flow.Flow
 
 interface ToDoRepository {
-    suspend fun getTodos(): List<ToDoItem>
+    fun getTodos(): Flow<List<ToDoItem>>
 
     suspend fun addTodo(todo: ToDoItem)
 
-    suspend fun getTodoByWeekday(weekDay : String) : List<ToDoItem>
+    fun getTodoByWeekday(weekDay : String) : Flow<List<ToDoItem>>
 }

@@ -1,37 +1,55 @@
 package com.example.todoappremote.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.todoappremote.data.local.ToDoEntity
 import com.example.todoappremote.domain.models.ToDoItem
-import com.example.todoappremote.domain.repositories.ToDoRepository
+import com.example.todoappremote.domain.models.toToDoItem
+import com.example.todoappremote.domain.use_cases.AddTodoUseCase
+import com.example.todoappremote.domain.use_cases.GetFilteredTodosUseCase
+import com.example.todoappremote.domain.use_cases.GetTodosUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class TodoViewModel(private val todoRepository: ToDoRepository): ViewModel() {
-    val allTodos = MutableStateFlow<List<ToDoItem>>(emptyList())
+class TodoViewModel(
+    private val getTodosUseCase: GetTodosUseCase,
+    private val addTodoUseCase: AddTodoUseCase,
+    private val getFilteredTodosUseCase: GetFilteredTodosUseCase
+): ViewModel() {
+    private val _allTodos = MutableStateFlow<List<ToDoItem>>(emptyList())
+    val allTodos: StateFlow<List<ToDoItem>> = _allTodos
+
+    init {
+        getAllTodos()
+        Log.e("ViewModel init", "all todos fetched")
+    }
 
     fun getAllTodos() {
         viewModelScope.launch {
-            val result = todoRepository.getTodos()
-            allTodos.value = result
+            getTodosUseCase().collect { result ->
+                _allTodos.value = result
+                Log.e("ViewModel func", result.toString())
+            }
         }
     }
 
-    fun insert(todo: ToDoItem) {
+    fun insert(todo: ToDoEntity) {
         viewModelScope.launch {
-            todoRepository.addTodo(todo)
-            getAllTodos()
+            addTodoUseCase(todo.toToDoItem())
         }
     }
 
     fun getFilteredTodos(day: String?) {
-        if (day != null) {
-            viewModelScope.launch {
-                val result = todoRepository.getTodoByWeekday(day)
-                allTodos.value = result
+        viewModelScope.launch {
+            if (day != null) {
+                getFilteredTodosUseCase(day).collect { result ->
+                    _allTodos.value = result
+                }
+            } else {
+                getAllTodos()
             }
-        } else {
-            getAllTodos()
         }
     }
 }
